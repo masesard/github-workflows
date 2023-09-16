@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visitor Information</title>
+</head>
+<body>
+    <h1>Visitor Information</h1>
+    <ul>
+        <li><strong>IP Address:</strong> <span id="ip-address">Loading...</span></li>
+        <li><strong>Geolocation latitude:</strong> <span id="latitude">Loading...</span></li>
+        <li><strong>Geolocation longitude:</strong> <span id="longitude">Loading...</span></li>
+        <li><strong>Device Type:</strong> <span id="device-type">Loading...</span></li>
+        <li><strong>Browser:</strong> <span id="browser-info">Loading...</span></li>
+        <li><strong>Screen Resolution:</strong> <span id="screen-resolution">Loading...</span></li>
+        <li><strong>Location (City, Region):</strong> <span id="location">Loading...</span></li>
+        <li><strong>Preferred Language:</strong> <span id="preferred-language">Loading...</span></li>
+        <li><strong>Timezone Offset:</strong> <span id="timezone-offset">Loading...</span></li>
+        <li><strong>Cookies:</strong> <span id="cookies">Loading...</span></li>
+        <li><strong>Local Storage:</strong> <span id="local-storage">Loading...</span></li>
+        <li><strong>Session Storage:</strong> <span id="session-storage">Loading...</span></li>
+        <li><strong>Screen Size:</strong> <span id="screen-size">Loading...</span></li>
+        <li><strong>Page Load Time (ms):</strong> <span id="page-load-time">Loading...</span></li>
+        <li><strong>Network Type:</strong> <span id="network-type">Loading...</span></li>
+
+       
+     
+
+    </ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
+    <script>
+        // Function to fetch the IP address using a third-party API
+        function getIpAddress() {
+            fetch('https://ipinfo.io?token=397ca056415a83')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ip-address').textContent = data.ip;
+                    document.getElementById('location').textContent = `${data.city}, ${data.region}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching IP address:', error);
+                });
+        }
+
+        // Function to detect the device type
+              // Function to detect the device type
+        function detectDeviceType() {
+            const userAgent = navigator.userAgent.toLowerCase();
+
+            if (userAgent.includes('mobile') || userAgent.includes('tablet')) {
+                document.getElementById('device-type').textContent = 'Mobile or Tablet Device';
+            } else {
+                document.getElementById('device-type').textContent = 'Desktop Device';
+            }
+        }
+
+        // Function to display browser information
+        function displayBrowserInfo() {
+            const browserInfo = `${navigator.appName} (${navigator.appVersion}) on ${navigator.platform}`;
+            document.getElementById('browser-info').textContent = browserInfo;
+        }
+
+        // Function to display screen resolution
+        function displayScreenResolution() {
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            document.getElementById('screen-resolution').textContent = `${screenWidth}x${screenHeight}`;
+        }
+
+        // Function to detect preferred language
+        function detectPreferredLanguage() {
+            const userLanguage = navigator.language;
+            document.getElementById('preferred-language').textContent = userLanguage;
+        }
+
+       // Function to display timezone offset
+        function displayTimezoneOffset() {
+            const userTimezoneOffset = new Date().getTimezoneOffset();
+            document.getElementById('timezone-offset').textContent = `${userTimezoneOffset} minutes`;
+        }
+
+        // Function to display cookies, local storage, and session storage
+            function displayStorageInfo() {
+            // Display Cookies
+            const allCookies = document.cookie;
+            // Split into array
+            const cookieArray = allCookies.split(';');
+            // Join array into string with line breaks
+            const cookieString = cookieArray.join('\n');
+            // Get element and update with cookie string
+            const cookiesElement = document.getElementById('cookies');
+            cookiesElement.textContent = cookieString;
+
+            // Display Local Storage
+            try {
+                localStorage.setItem('local-storage-example', 'Local Storage Data');
+                const localData = localStorage.getItem('local-storage-example');
+                document.getElementById('local-storage').textContent = localData;
+            } catch (error) {
+                console.error('Local storage is not available:', error);
+            }
+
+            // Display Session Storage
+            try {
+                sessionStorage.setItem('session-storage-example', 'Session Storage Data');
+                const sessionData = sessionStorage.getItem('session-storage-example');
+                document.getElementById('session-storage').textContent = sessionData;
+            } catch (error) {
+                console.error('Session storage is not available:', error);
+            }
+        }
+
+
+        // Function to display screen size
+        function displayScreenSize() {
+            const screenSize = `${window.innerWidth}x${window.innerHeight}`;
+            document.getElementById('screen-size').textContent = screenSize;
+        }
+
+
+
+        // Function to measure page load time
+        function measurePageLoadTime() {
+            const loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
+            document.getElementById('page-load-time').textContent = `${loadTime} ms`;
+        }
+
+
+        // Function to detect network type
+        function detectNetworkType() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                const type = connection.effectiveType;
+                document.getElementById('network-type').textContent = type;
+            }
+        }
+
+
+            function getLocation() {
+                        if ("geolocation" in navigator) {
+                            navigator.geolocation.getCurrentPosition(function(position) {
+                                const latitude = position.coords.latitude;
+                                const longitude = position.coords.longitude;
+
+                                document.getElementById("latitude").textContent = latitude;
+                                document.getElementById("longitude").textContent = longitude;
+                            }, function(error) {
+                                console.error("Error getting location:", error);
+                            });
+                        } else {
+                            alert("Geolocation is not supported by your browser.");
+                        }
+                    }
+
+
+
+        // Call the functions to gather visitor information when the page loads
+        window.addEventListener('load', () => {
+            getIpAddress();
+            detectDeviceType();
+            displayBrowserInfo();
+            displayScreenResolution();
+            detectPreferredLanguage();
+            displayTimezoneOffset();
+            displayStorageInfo();
+            displayScreenSize();
+            measurePageLoadTime();
+            detectNetworkType();
+            
+            
+        });
+
+        // Add event listeners for mouse coordinates and keyboard input
+        window.addEventListener('load',getLocation);
+    
+
+
+    </script>
+</body>
+</html>
+
+            
